@@ -28,8 +28,8 @@ def epoch_seconds():
 
 
 def get_token():
-    task = {"password": "309951", "account": "jason@hatleygarage.co.uk", "cmd": 100000,
-            "authkey": "jason@hatleygarage.co.uk309951"}
+    task = {"password": WifiAcSession.password, "account": WifiAcSession.account, "cmd": 100000,
+            "authkey": WifiAcSession.authkey}
     body = "jsonString=" + task.__str__() + WIFI_AC_API.identifier
     print(body)
     resp = requests.post(WIFI_AC_API.url, data=body,
