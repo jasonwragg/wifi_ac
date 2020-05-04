@@ -57,16 +57,21 @@ def get_ac_units(token):
     if resp.status_code != 200:
         raise ApiError('GET /tasks/ {}'.format(resp.status_code))
 
-    print('{}'.format(resp.json()))
+    print('Returned Code is: {}'.format(resp.json()))
     y = resp.json()
-    for results in y["content"]:
-        print('{}'.format(results["id"]))
-        command = {"cmd": 10002, "token": token, "req_timestamp": epoch_seconds(), "aircondid": results["id"]}
-        body = "jsonString=" + command.__str__() + WIFI_AC_API.identifier
-        resp = requests.post(WIFI_AC_API.url, data=body,
-                             headers={"Content-Type": "application/x-www-form-urlencoded", "Cookie": token})
-        print('{}'.format(resp.json()))
-        return resp.json()
+    x = y["result"]
+    if x["code"] == 0:
+        for results in y["content"]:
+            print('{}'.format(results["id"]))
+            command = {"cmd": 10002, "token": token, "req_timestamp": epoch_seconds(), "aircondid": results["id"]}
+            body = "jsonString=" + command.__str__() + WIFI_AC_API.identifier
+            resp = requests.post(WIFI_AC_API.url, data=body,
+                                 headers={"Content-Type": "application/x-www-form-urlencoded", "Cookie": token})
+            print('{}'.format(resp.json()))
+            return resp.json()
+    else:
+        print('Token is not valid, lets try again.')
+        get_ac_units(get_token())
 
 
 class Pywifiac:
